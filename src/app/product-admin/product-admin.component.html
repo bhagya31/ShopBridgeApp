@@ -1,0 +1,159 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="center">
+                <button mat-raised-button color="accent" class="mb-3" data-toggle="modal" data-target="#addModal">Add product</button>
+              </div>
+            <table class="table table-bordered">
+              <thead class="text-center">
+                <tr>
+                  <th>Id</th>
+                  <th>Product Name</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Image</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of productArr" class="text-center">
+                  <td>{{product.id}}</td>
+                  <td>{{product.title | uppercase}}</td>
+                  <td>{{product.description}}</td>
+                  <td>{{product.price | currency: 'INR'}}</td>
+                  <td><img [src]="product.image" *ngIf="product.image" style="float:right" width="75"></td>
+                  <td>
+                    <div class="btn-group mt-2">
+                      <button mat-icon-button color="accent" aria-label="Example icon button with a home icon">
+                        <mat-icon (click) = "onSelected(product)">list</mat-icon>
+                      </button>
+                      <button mat-icon-button color="primary" aria-label="Example icon button with a home icon" data-toggle="modal" data-target="#editModal">
+                        <mat-icon (click)="onEditModal(product)">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="warn" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="onDelete(product)">delete</mat-icon>
+                      </button> 
+                     
+                    </div> 
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Add New Product Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">ADD NEW PRODUCT</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>All fields are mandatory..!</h5>
+            <form action="" [formGroup]="productForm">
+                <div class="form-group">
+                    <label for="">Product Name</label>
+                    <input type="text" class="form-control" formControlName="title">
+                    <div class="alert alert-danger" role="alert" *ngIf="productForm.get('title').invalid && productForm.get('title').touched">
+                      Name is required..!!
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label for="">Price</label>
+                  <input type="text" class="form-control" formControlName="price">
+                  <div class="alert alert-danger" role="alert" *ngIf="productForm.get('price').invalid && productForm.get('price').touched">
+                    Price is required..!!
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="">Description</label>
+                  <input type="text" class="form-control" formControlName="description">
+                  <div class="alert alert-danger" role="alert" *ngIf="productForm.get('description').invalid && productForm.get('description').touched">
+                    Description is required..!!
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="">ImageUrl</label>
+                  <input type="text" class="form-control" formControlName="image">
+                  <div class="alert alert-danger" role="alert" *ngIf="productForm.get('image').invalid && productForm.get('image').touched">
+                    Image is required..!!
+                  </div>
+              </div>   
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" mat-raised-button color="warn" class="mr-2" data-dismiss="modal">Close</button>
+            <button type="submit" mat-raised-button color="primary" (click)="onClickAdd()" data-dismiss="modal">Add product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--Update existing product Modal-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">EDIT PRODUCT</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>All fields are mandatory..!</h5>
+          <form action="" [formGroup]="editForm">
+            <!-- <div class="form-group">
+              <label for="">Product Id</label>
+              <input type="text" class="form-control" formControlName="id">
+          </div> -->
+              <div class="form-group">
+                  <label for="">Product Name</label>
+                  <input type="text" class="form-control" formControlName="title">
+                  <div class="alert alert-danger" role="alert" *ngIf="productForm.get('title').invalid && productForm.get('title').touched">
+                    Name is required..!!
+                  </div>
+              </div>
+              <div class="form-group">
+                <label for="">Price</label>
+                <input type="text" class="form-control" formControlName="price">
+                <div class="alert alert-danger" role="alert" *ngIf="productForm.get('price').invalid && productForm.get('price').touched">
+                  Price is required..!!
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <input type="text" class="form-control" formControlName="description">
+                <div class="alert alert-danger" role="alert" *ngIf="productForm.get('description').invalid && productForm.get('description').touched">
+                  Description is required..!!
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">ImageUrl</label>
+                <input type="text" class="form-control" formControlName="image">
+                <div class="alert alert-danger" role="alert" *ngIf="productForm.get('image').invalid && productForm.get('image').touched">
+                  Image is required..!!
+                </div>
+            </div>  
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" mat-raised-button color="warn" class="mr-2" data-dismiss="modal">Close</button>
+          <button type="submit" mat-raised-button color="primary" (click)="onUpdate()" data-dismiss="modal" [disabled]="editForm.invalid" >Update product</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
